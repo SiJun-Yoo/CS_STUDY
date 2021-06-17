@@ -4,7 +4,7 @@
 + [2. TCP/IP]
 + [3. TCP vs UDP]
   + [3-1. TCP]
-  + [3-2. TCP의 3 way handshake 와 4 way handshake]
+  + [3-2. TCP의 3-way handshake 와 4-way handshake]
   + [3-3. UDP]
 + [4. HTTP vs HTTPS]
   + [4-1. HTTP]
@@ -142,5 +142,25 @@
         - 로컬 랜상에 붙어있는 모든 네트워크 장비들에게 그들의 의사와 상관없이 모두 보내는 방식
       ```
     + 연속성보다 신뢰성있는 전송이 주요할 때에 사용
-### 3-2. TCP의 3 way handshake 와 4 way handshake
-  
+### 3-2. TCP의 3-way handshake 와 4-way handshake
+  + TCP는 장치들 사이에 논리적인 접속을 성립하기 위하여 연결을 설정하여 신뢰성을 보장하는 연결형 서비스
+  + 3-way handshake
+    + TCP 통신을 이용하여 데이터를 전송하기 위해 네트워크 연결을 설정하는 과정
+    + 양쪽 모두 데이터를 전송할 준비가 되었다는 것을 보장, 실제로 데이터 전달이 시작하기 전에 한 쪽이 다른 쪽이 준비되었음을 알 수 있음
+    + 즉, TCP/IP 프로토콜을 이용해서 통신을 하는 응용 프로그램이 데이터를 전송하기 전에 먼저 정확한 전송을 보장하기 위해 상대방 컴퓨터와 사전에 세션을 수립하는 과정을 의미
+    + 동작 과정
+      + A 프로세트(Client)가 B 프로세스(Server)에 연결을 요청
+        + 1. A -> B : SYN
+          + 접속 요청 프로세스 A가 연결 요청 메시지 전송(SYN)
+          + 송신자가 최초로 데이터를 전송할 때 시퀀스 넘버(Sequence Number)를 임의의 랜덤 숫자로 지정, SYN 플래그 비트를 1로 설정한 세그먼트 전송
+          + PORT 상태 : A - CLOSED, B : LISTEN
+        + 2. B -> A : SYN + ACK
+          + 접속 요청을 받은 프로세스 B가 요청을 수락했으며, 접속 요청 프로세스인 A도 포트를 열어 달라는 메시지 전송 (SYN + ACK)
+          + 수신자는 Acknowledgement Number 필드를 (Sequence Number + 1)로 지정, SYN과 ACK 플래그 비트를 1로 설정한 세그먼트를 전송
+          + PORT 상태 : A : CLOSED, B : SYN_RCV
+        + 3. A -> B : ACK
+          + 마지막으로 접속 요청 프로세스 A가 수락 확인을 보내 연결을 맺음 (ACK)
+          + 데이터 전송이 가능
+          + PORT 상태 : A : ESTABLISHED, B : ESTABLISHED
+  +  4-way handshake
+    +  
