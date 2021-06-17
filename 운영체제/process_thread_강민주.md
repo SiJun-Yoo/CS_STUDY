@@ -1,7 +1,5 @@
 #### 대략적인 컴퓨터구조
 
-![image-20210617120119156](C:\Users\cherr\AppData\Roaming\Typora\typora-user-images\image-20210617120119156.png)
-
 ![image-20210617120119156](https://user-images.githubusercontent.com/77487962/122360831-ac214080-cf91-11eb-9954-5a8c49b41bd9.png)
 
 
@@ -37,7 +35,8 @@
 
 > **프로세스의 구성 요소**
 
-![image-20210617163852934](C:\Users\cherr\AppData\Roaming\Typora\typora-user-images\image-20210617163852934.png)
+![image-20210617163852934](https://user-images.githubusercontent.com/77487962/122361220-028e7f00-cf92-11eb-996a-aeb9c9a7a497.png)
+
 
 
 
@@ -85,7 +84,8 @@
 
 Heap 영역은 아래에서 위 방향으로 데이터를 저장해나가고, Stack은 맨위부터 아래방향으로 데이터 저장해 나간다는 뜻이다.
 
- ![image-20210617163941860](C:\Users\cherr\AppData\Roaming\Typora\typora-user-images\image-20210617163941860.png)
+![image-20210617163941860](https://user-images.githubusercontent.com/77487962/122361304-1639e580-cf92-11eb-85d4-d784113baf23.png)
+
 
  
 
@@ -123,7 +123,8 @@ Heap 영역은 아래에서 위 방향으로 데이터를 저장해나가고, St
 
 > 스레드 (Thread)
 
-![image-20210617165835084](C:\Users\cherr\AppData\Roaming\Typora\typora-user-images\image-20210617165835084.png)
+![image-20210617165835084](https://user-images.githubusercontent.com/77487962/122361387-28b41f00-cf92-11eb-8db0-dc5d58e12038.png)
+
 
 프로세스 내에서 실행되는 프로그램 코드의 흐름을 말한다.
 
@@ -163,13 +164,13 @@ Heap 영역은 아래에서 위 방향으로 데이터를 저장해나가고, St
 
 |      | Process                                   | Thread                               |
 | ---- | ----------------------------------------- | ------------------------------------ |
-| 1    | 실행 중인 프로그램                        | 프로세스의 실행 단위                 |
-| 2    | 종료하는데 시간이 걸림                    | 종료하는데 시간이 덜 걸림            |
-| 3    | 생성하는데 더 시간이 걸림                 | 생성 시간이 덜 걸림                  |
-| 4    | Context전환에 더 많은 시간이 걸림         | Context전환에 소요되는 시간이 줄어듬 |
-| 5    | 대화 측면에서 프로세스의 효율성이 떨어짐  | 대화면에서 쓰레드가 더 효율적        |
+| 1    | 실행 중인 프로그램                         | 프로세스의 실행 단위                 |
+| 2    | 종료하는데 시간이 걸림                     | 종료하는데 시간이 덜 걸림            |
+| 3    | 생성하는데 더 시간이 걸림                  | 생성 시간이 덜 걸림                  |
+| 4    | Context전환에 더 많은 시간이 걸림          | Context전환에 소요되는 시간이 줄어듬 |
+| 5    | 대화 측면에서 프로세스의 효율성이 떨어짐    | 대화면에서 쓰레드가 더 효율적        |
 | 6    | 더 많은 Resource를 소비                   | 적은 Resource 소비                   |
 | 7    | 메모리 공유 X                             | 메모리 공유 O                        |
-| 8    | heavy-weight process                      | light-weigth process                 |
-| 9    | 프로세스 전환 -> 운영체제 인터페이스 사용 | 스레드 전환 ->운영체제 호출 X        |
+| 8    | heavy-weight process                     | light-weigth process                 |
+| 9    | 프로세스 전환 -> 운영체제 인터페이스 사용   | 스레드 전환 ->운영체제 호출 X        |
 
