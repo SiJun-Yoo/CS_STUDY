@@ -4,21 +4,21 @@
 + [2. TCP/IP]
 + [3. TCP vs UDP]
   + [3-1. TCP]
-  + [3-2. UDP]
-+ [4. TCP의 3 way handshake 와 4 way handshake]
-+ [5. HTTP vs HTTPS]
-  + [5-1. HTTP]
-  + [5-2. HTTPS]
-+ [6. GET vs POST]
-  + [6-1. GET]
-  + [6-2. POST]
-+ [7. Cookie(쿠키) vs Session(세션)]
-  + [7-1. Cookie(쿠키)]
-  + [7-2. Session(세션)]
-+ [8. Rest 와 Restful]
-  + [8-1. Rest]
-  + [8-2. Rest API]
-  + [8-3. Restful]
+  + [3-2. TCP의 3 way handshake 와 4 way handshake]
+  + [3-3. UDP]
++ [4. HTTP vs HTTPS]
+  + [4-1. HTTP]
+  + [4-2. HTTPS]
++ [5. GET vs POST]
+  + [5-1. GET]
+  + [5-2. POST]
++ [6. Cookie(쿠키) vs Session(세션)]
+  + [6-1. Cookie(쿠키)]
+  + [6-2. Session(세션)]
++ [7. Rest 와 Restful]
+  + [7-1. Rest]
+  + [7-2. Rest API]
+  + [7-3. Restful]
 
 ## 1. OSI 7계층
   + OSI (Open Systems Interconnection Reference Model)
@@ -92,4 +92,55 @@
     + 데이터 단위 : Data / Message
     + 응용 프로그램(Application)들이 데이터를 교환하기 위해 사용되는 프로토콜
     + 사용자 응용 프로그램 인터페이스를 담당
-    
+ 
+## 3. TCP vs UDP
+#### 3-1. TCP
+  + TCP (Transmission Control Protocol)
+    + 인터넷 상에서 데이터를 메세지의 형태(세그먼트 라는 블록 단위)로 보내기 위해 IP와 함게 사용하는 프로토콜
+    + TCP와 IP를 함께 사용하는데, IP는 데이터의 배달을 처리, TCP는 패킷을 추적
+    + 연결형 서비스로 가상 회선 방식을 제공
+      + 3-way handshaking 과정을 통해 연결을 설정, 4-way handshaking을 통해 연결을 해제
+    + 흐름 제어 (Flow Control)
+      + 수신측이 송신측보다 데이터 처리 속도가 빠르면 문제없지만, 송신측의 속도가 빠를 경우 문제 발생
+      + 수신측에서 제한된 저장 용량 초과한 후 도착하는 데이터는 손실 될 수 있으며, 만약 손실시 불필요한 응답, 데이터 전송이 송수신 측간에 빈번이 발생
+      + 데이터를 송신하는 곳과 수신하는 곳의 데이터 처리 속도를 조절하여 수신자의 버퍼 오버플로우 방지
+      + 해결 방법
+        + Stop and Wait : 매번 전송한 패킷에 대해 확인 응답을 받아야만 다음 패킷을 전송하는 방법
+        + Sliding Window (Go Back N ARQ) : 수신측에서 설정한 윈도우 크기만큼 송신측에서 확인 응답없이 세그먼트를 전송할 수 있게 하여 데이터 흐름을 동적으로 조절하는 제어기법
+        ```
+        * 목적 : 전송은 되었지만, ACK를 받지 못한 byte의 숫자를 파악하기 위해 사용하는 protocol
+        (LastByteSent - LastByteAcked <= ReceiveWindowAdvertised)
+        마지막에 보내진 바이트 - 마지막에 확인된 바이트 <= 남아있는 공간
+        * 동작 방식
+          1. 윈도우에 포함되는 모든 패킷을 전송
+          2. 그 패킷들의 전달이 확인되는 대로 윈도우를 옆으로 옮김으로써 다음 패킷들을 전송
+        ```
+    + 혼잡 제어 (Congestion Control)
+      + 네트워크 내의 패킷 수가 넘치게 증가하지 않도록 방지
+      + 정보의 소통량이 과다하면 패킷을 조금만 전송하여 혼잡 붕괴 현상이 일어나는 것을 방지
+      + 해결 방법
+        + AIMD (Additive Increase / Multiplicative Decrease)
+        + Slow Start (느린 시작)
+        + Fast Retransmit (빠른 재전송)
+        + Fast Recovery (빠른 회복)
+    + 높은 신뢰성을 보장
+    + UDP보다 속도가 느림
+    + 전이중(Full-Duplex), 점대점(Point to Point) 방식
+      + 전이중
+        + 전송이 양방향으로 동시에 일어날 수 있다.
+      + 점대점
+        + 각 연결이 정확히 2개의 종단점을 가지고 있다.
+      + 멀티캐스팅이나 브로드캐스팅을 지원하지 않는다.
+      ```
+      * 유니캐스팅
+        - MAC 주소를 기반으로 상대측 IP주소를 목적지로 하는 일대일 통신 방식
+      * 멀티캐스팅
+        - UDP 기반
+        - 하나 이상의 송신자들이 특정한 하나 이상의 수신자들에게 데이터를 전송하는 방식
+      * 브로드캐스팅
+        - UDP 기반
+        - 로컬 랜상에 붙어있는 모든 네트워크 장비들에게 그들의 의사와 상관없이 모두 보내는 방식
+      ```
+    + 연속성보다 신뢰성있는 전송이 주요할 때에 사용
+### 3-2. TCP의 3 way handshake 와 4 way handshake
+  
