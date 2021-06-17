@@ -162,5 +162,25 @@
           + 마지막으로 접속 요청 프로세스 A가 수락 확인을 보내 연결을 맺음 (ACK)
           + 데이터 전송이 가능
           + PORT 상태 : A : ESTABLISHED, B : ESTABLISHED
-  +  4-way handshake
-    +  
+  + 4-way handshake
+    + TCP의 연결을 해제하는 과정
+      + A 프로세스(Client)가 B 프로세스(Server)에 연결 해제를 요청
+        + 1. A -> B : FIN
+          + 프로세스 A가 연결을 종료하겠다는 FIN 플래그 전송
+          + 프로세스 B가 FIN 플래그로 응답하기 전까지 연결 유지
+        + 2. B -> A : ACK
+          + 프로세스 B는 일단 확인 메시지 전송 자신의 통신이 끝날 때까지 기다림(이 상태가 TIME_WAIT 상태)
+          + 수신자는 Acknowledgement Number 필드를 (Sequence Number + 1)로 지정하고, ACK 플래그 비트를 1로 설정한 세그먼트 전송
+          + 자신이 전송할 데이터가 남아있다면 이어서 전송
+        + 3. B -> A : FIN
+          + 프로세스 B가 통신이 끝나면 연결 종료 요청에 합의한다는 의미로 프로세스 A에게 FIN 플래그 전송
+        + 4. A -> B : ACK
+          + 프로세스 A는 확인했다는 메시지 전송
+  ```
+  포트(Port) 상태 정보
+    - CLOSED : 포트가 닫힌 상태
+    - LISTEN : 포트가 열린 상태로 연결 요청 대기
+    - SYN_RCV : SYNC 요청을 받고 상대방의 응답을 기다리는 중
+    - ESTABLISHED : 포트 연결 상태
+  ```
+      
