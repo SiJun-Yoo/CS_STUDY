@@ -79,16 +79,17 @@
       + 논리 주소(IP주소 등)이 아닌 물리주소(MAC주소)을 참조해 전송
       <br> MAC 주소(Media Access Control Address) : 컴퓨터의 하드웨어 주소
     + 기본적으로 에러검출 / 패킷의 프레임화 담당
-   + [2. 인터넷 계층 (Internet Layer)]
+  + [2. 인터넷 계층 (Internet Layer)]
     + 데이터 단위 : 패킷(Packet), 전송 주소 : IP 주소
-    + 네트워크상 최종 목적지까지 정확하게 연결되도록 연결성 제공
+    + 네트워크상 최종 목적지까지 정확하게 연결되로고 연결성 제공
     + 단말을 구분하기 위해 논리적인 주소(Logical Address) IP를 할당
     + 라우팅(Routing) 기능을 처리
-    + 패킷 단위의 데이터 구성
-   +  [3. 전송 계층 (Transport Layer)
+    + 패킷 단위의 데이터 
+  + [3. 전송 계층 (Transport Layer)]
     + 데이터 단위 : 세그먼트(Segment), 전송 주소 : 포트(Port)
     + 통신 노드 간의 연결 제어 및 자료 송수신을 담당
-   +  [4. 응용 계층 (Application Layer)
-    +  데이터 단위 : Data / Message
-    +  응용프로그램(Application)들이 데이터를 교환하기 위해 사용되는 프로토콜
-    +  사용자 응용프로그램 인터페이스를 
+  + [4. 응용 계층 (Application Layer)]
+    + 데이터 단위 : Data / Message
+    + 응용 프로그램(Application)들이 데이터를 교환하기 위해 사용되는 프로토콜
+    + 사용자 응용 프로그램 인터페이스를 담당
+    
