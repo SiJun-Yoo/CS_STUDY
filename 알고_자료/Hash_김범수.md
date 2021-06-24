@@ -70,9 +70,9 @@
   - HashTable vs HashMap
     - Key-Value 구조 및 Key에 대한 Hash로 Value 관리하는 것은 동일
     - HashTable
-      - 동기
+      - 동기(병렬 처리 할 때)
       - null값 허용
-      - 보조 Hash Function과 Separating Chaining을 사용하여 비교적 충돌 덜 발생 (Key의 Hash변형)
     - HashMap
-      - 비동기(멀티 스레드 환경에서 주의)
+      - 비동기(병렬 처리 하지 않을 때) -> 멀티 스레드 환경에서 주의 : 여러 쓰레드가 동시에 객체 조작 -> 데이터 손실
       - null값 미허용(Key가 hashcode(), equals()를 사용하기 때문)
+      - 보조 Hash Function을 사용하여 비교적 충돌 덜 발생
