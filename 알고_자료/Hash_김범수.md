@@ -12,6 +12,7 @@
     - Key가 주어졌을 때, 해당 Key에 연관된 Value 제거
 
   - HashTable 구조
+  
     ![hashtable](https://user-images.githubusercontent.com/61149599/123202785-3288d580-d4f0-11eb-8d2e-55cd0bbad82a.png)
     
   - Key
@@ -47,3 +48,13 @@
     - 공간 복잡도 증가
     - 순서 무시
     - 해시 함수에 의존
+  
+  - HashTable vs HashMap
+    - Key-Value 구조 및 Key에 대한 Hash로 Value 관리하는 것은 동일
+    - HashTable
+      - 동기
+      - null값 허용
+      - 보조 Hash Function과 Separating Chaining을 사용하여 비교적 충돌 덜 발생 (Key의 Hash변형)
+    - HashMap
+      - 비동기(멀티 스레드 환경에서 주의)
+      - null값 미허용(Key가 hashcode(), equals()를 사용하기 때문)
