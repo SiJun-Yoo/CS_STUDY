@@ -12,7 +12,8 @@
     - Key가 주어졌을 때, 해당 Key에 연관된 Value 제거
 
   - HashTable 구조
-
+    ![hashtable](https://user-images.githubusercontent.com/61149599/123202785-3288d580-d4f0-11eb-8d2e-55cd0bbad82a.png)
+    
   - Key
     - 고유한 값
     - 저장 공간의 효율성을 위해 Hash Function에 입력하여 Hash로 변경 후 구성
