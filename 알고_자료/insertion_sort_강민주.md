@@ -39,43 +39,31 @@
   - ![image](https://user-images.githubusercontent.com/77487962/124349333-720a9c80-dc29-11eb-9de3-0c434679e591.png)
 
 
-### 삽입 정렬(insertion sort) c언어 코드
+### 삽입 정렬(insertion sort) JAVA 코드
 ```
-# include <stdio.h>
-# define MAX_SIZE 5
-// 삽입 정렬
-void insertion_sort(int list[], int n){
-  int i, j, key;
-
-  // 인텍스 0은 이미 정렬된 것으로 볼 수 있다.
-  for(i=1; i<n; i++){
-    key = list[i]; // 현재 삽입될 숫자인 i번째 정수를 key 변수로 복사
-
-    // 현재 정렬된 배열은 i-1까지이므로 i-1번째부터 역순으로 조사한다.
-    // j 값은 음수가 아니어야 되고
-    // key 값보다 정렬된 배열에 있는 값이 크면 j번째를 j+1번째로 이동
-    for(j=i-1; j>=0 && list[j]>key; j--){
-      list[j+1] = list[j]; // 레코드의 오른쪽으로 이동
-    }
-
-    list[j+1] = key;
-  }
-}
-
-void main(){
-  int i;
-  int n = MAX_SIZE;
-  int list[n] = {8, 5, 6, 2, 4};
-
-  // 삽입 정렬 수행
-  insertion_sort(list, n);
-
-  // 정렬 결과 출력
-  for(i=0; i<n; i++){
-    printf("%d\n", list[i]);
-  }
+void insertionSort(int[] arr)
+{
+   for(int index = 1 ; index < arr.length ; index++){ // 1.
+      int temp = arr[index];
+      int prev = index - 1;
+      while( (prev >= 0) && (arr[prev] > temp) ) {    // 2.
+         arr[prev+1] = arr[prev];
+         prev--;
+      }
+      arr[prev + 1] = temp;                           // 3.
+   }
+   System.out.println(Arrays.toString(arr));
 }
 ```
+
+1. 첫 번째 원소 앞(왼쪽)에는 어떤 원소도 갖고 있지 않기 때문에, 두 번째 위치(index)부터 탐색을 시작한다. temp에 임시로 해당 위치(index) 값을 저장하고, prev에는 해당 위치(index)의 이전 위치(index)를 저장한다.
+2. 이전 위치(index)를 가리키는 prev가 음수가 되지 않고, 이전 위치(index)의 값이 '1'번에서 선택한 값보다 크다면, 서로 값을 교환해주고 prev를 더 이전 위치(index)를 가리키도록 한다.
+3. '2'번에서 반복문이 끝나고 난 뒤, prev에는 현재 temp 값보다 작은 값들 중 제일 큰 값의 위치(index) 를 가리키게 된다. 따라서, (prev+1)에 temp 값을 삽입해준다.
+
+### GIF로 보는 insertion sort
+![image](https://raw.githubusercontent.com/GimunLee/tech-refrigerator/master/Algorithm/resources/insertion-sort-001.gif)
+
+
 ### 삽입 정렬(insertion sort) 알고리즘의 특징
 - 장점
   - 안정한 정렬 방법
@@ -87,7 +75,13 @@ void main(){
 
 ### 삽입 정렬(insertion sort)의 시간복잡도
 시간복잡도를 계산한다면
+```
+최악의 경우(역으로 정렬되어 있을 경우) Selection Sort와 마찬가지로, (n-1) + (n-2) + .... + 2 + 1 => n(n-1)/2 즉, O(n^2) 이다.
 
+하지만, 모두 정렬이 되어있는 경우(Optimal)한 경우, 한번씩 밖에 비교를 안하므로 O(n) 의 시간복잡도를 가지게 된다. 또한, 이미 정렬되어 있는 배열에 자료를 하나씩 삽입/제거하는 경우에는, 현실적으로 최고의 정렬 알고리즘이 되는데, 탐색을 제외한 오버헤드가 매우 적기 때문이다.
+
+최선의 경우는 O(n) 의 시간복잡도를 갖고, 평균과 최악의 경우 O(n^2) 의 시간복잡도를 갖게 된다.
+```
 - 최선의 경우
     - 비교 횟수
       - 이동 없이 1번의 비교만 이루어진다.
@@ -108,3 +102,6 @@ void main(){
   - 삽입 정렬, 선택 정렬, 버블 정렬
 - 복잡하지만 효율적인 방법
   - 퀵 정렬, 힙 정렬, 합병 정렬, 기수 정렬
+
+### 공간복잡도
+- 주어진 배열 안에서 교환(swap)을 통해, 정렬이 수행되므로 O(n) 이다.
