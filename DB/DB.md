@@ -285,4 +285,12 @@ update와 delete는 인덱스를 삭제하는게 아니라 사용하지  않음 
             - 읽기 작업에도 공유 잠금을 설정, 동시에 다른 트랜잭션에서 이 레코드를 변경하지 못함
             - 동시처리 능력이 다른격리수준보다 떨어지고, 성능 저하가 발생     
    - 낮은 단계의 Isolation Level에서 발생하는 현상
-   
+     ![isolation-level](https://user-images.githubusercontent.com/61149599/124345150-0bc64f80-dc12-11eb-8bb7-8c92d56bdac9.png)
+      - Dirty Read
+         - 커밋되지 않은 수정 중인 데이터를 다른 트랜잭션에서 읽을 수 있도록 허용할 때 발생하는 현상
+      - Non-Repeatable Read
+         - 한 트랜잭션에서 같은 쿼리를 두번 수행할 때 그 사이에 다른 트랜잭션이 값을 수정 또는 삭제함으로써 두 쿼리의 결과가 상이하게 나타나는 비 일관성 현상
+      - Phantom Read
+         - 한 트랜잭션 내에서 같은 쿼리문이 실행되었음에도 불구하고 조회 결과가 다른 경우
+         - 트랜잭션 도중 새로운 레코드가 삽입되는 것을 허용하기 때문에 나타난다.
+      *** https://joont92.github.io/db/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B2%A9%EB%A6%AC-%EC%88%98%EC%A4%80-isolation-level/
