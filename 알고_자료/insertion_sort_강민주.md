@@ -16,24 +16,26 @@
 ### 삽입 정렬(insertion sort) 알고리즘의 예제
   - 배열에 8, 5, 6, 2, 4가 저장되어 있다고 가정하고 자료를 오름차순으로 정렬해 보자.
   - ![image](https://user-images.githubusercontent.com/77487962/124349250-2bb53d80-dc29-11eb-89c4-3bc91860e621.png)
+ 
+  - ![image](https://user-images.githubusercontent.com/77487962/124349277-45568500-dc29-11eb-9bab-ee636405417b.png)
   > 1회전: 두 번째 자료인 5를 Key로 해서 그 이전의 자료들과 비교한다.
   > > - Key 값 5와 첫 번째 자료인 8을 비교한다. 8이 5보다 크므로 8을 5자리에 넣고 Key 값 5를 8의 자리인 첫 번째에 기억시킨다.
-  - ![image](https://user-images.githubusercontent.com/77487962/124349277-45568500-dc29-11eb-9bab-ee636405417b.png)
+  - ![image](https://user-images.githubusercontent.com/77487962/124349297-57382800-dc29-11eb-99f6-e91cb24878bf.png)
   > 2회전: 세 번째 자료인 6을 Key 값으로 해서 그 이전의 자료들과 비교한다.
   > > - Key 값 6과 두 번째 자료인 8을 비교한다. 8이 Key 값보다 크므로 8을 6이 있던 세 번째 자리에 기억시킨다.
   > > - Key 값 6과 첫 번째 자료인 5를 비교한다. 5가 Key 값보다 작으므로 Key 값 6을 두 번째 자리에 기억시킨다.
-  - ![image](https://user-images.githubusercontent.com/77487962/124349297-57382800-dc29-11eb-99f6-e91cb24878bf.png)
+  - ![image](https://user-images.githubusercontent.com/77487962/124349310-6028f980-dc29-11eb-8bbb-47d13ef702d5.png)
   > 3회전: 네 번째 자료인 2를 Key 값으로 해서 그 이전의 자료들과 비교한다.
   > > - Key 값 2와 세 번째 자료인 8을 비교한다. 8이 Key 값보다 크므로 8을 2가 있던 네 번째 자리에 기억시킨다.
   > > - Key 값 2와 두 번째 자료인 6을 비교한다. 6이 Key 값보다 크므로 6을 세 번째 자리에 기억시킨다.
   > > - Key 값 2와 첫 번째 자료인 5를 비교한다. 5가 Key 값보다 크므로 5를 두 번째 자리에 넣고 그 자리에 Key 값 2를 기억시킨다.
-  - ![image](https://user-images.githubusercontent.com/77487962/124349310-6028f980-dc29-11eb-8bbb-47d13ef702d5.png)
+  - ![image](https://user-images.githubusercontent.com/77487962/124349330-6dde7f00-dc29-11eb-8d91-05d18a8de357.png)
   > 4회전: 다섯 번째 자료인 4를 Key 값으로 해서 그 이전의 자료들과 비교한다.
   > > - Key 값 4와 네 번째 자료인 8을 비교한다. 8이 Key 값보다 크므로 8을 다섯 번째 자리에 기억시킨다.
   > > - Key 값 4와 세 번째 자료인 6을 비교한다. 6이 Key 값보다 크므로 6을 네 번째 자리에 기억시킨다.
   > > - Key 값 4와 두 번째 자료인 5를 비교한다. 5가 Key 값보다 크므로 5를 세 번째 자리에 기억시킨다. 
   > > - Key 값 4와 첫 번째 자료인 2를 비교한다. 2가 Key 값보다 작으므로 4를 두 번째 자리에 기억시킨다.
-  - ![image](https://user-images.githubusercontent.com/77487962/124349330-6dde7f00-dc29-11eb-8d91-05d18a8de357.png)
+  
   - ![image](https://user-images.githubusercontent.com/77487962/124349333-720a9c80-dc29-11eb-9de3-0c434679e591.png)
 
 
