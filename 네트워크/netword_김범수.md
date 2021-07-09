@@ -375,10 +375,59 @@ HTTP 프로토콜에서 상태를 유지하기 위한 기술로 쿠키와 세션
     + 쿠키 : 클라이언트에 저장되어서 서버에 요청 시 빠르다.
     + 세션 : 실제 저장된 정보가 서버에 있으므로 서버의 처리가 필요해 쿠키보다 느리다.      
       
-      
-      
-      
-      
+      # WebServer?
+
+> 
+클라이언트로 부터 Http요청을 받아 HTML,CSS,img와 같은 정적 컨텐츠를 제공
+
+* Apache,Nginx가 대표적인 웹서버
+* WAS에게 동적인 컨텐츠 제공을 위한 요청을 전달함
+* Request를 WAS에게 보내고 WAS가 처리한 데이터를 클라이언트에게 Response한다.
+
+# WAS?
+>
+Request에 대한 비즈니스 로직들을 처리해 동적인 컨텐츠를 제공
+
+* Tomcat이 대표적인 WAS
+* 웹컨테이너 || 서블릿 컨테이너라고 불린다.
+* 업무를 처리하는 비즈니스 로직을 수행함
+* 프로그램 실행환경과 DB접근을 제공
+* 여러개의 트랜잭션 관리
+![](https://images.velog.io/images/dbtlwns/post/1244caf2-fdb6-420c-91a4-73c3bd313566/image.png)
+
+# 왜 구분하나?
+
+* 부하방지
+WebServer를 통해 정적인 파일들을 Application Server까지 가지않고 앞단에서 빠르게 보내줄수 있다. 또한 WebServer하나에 WAS여러개를 연결하여(로드밸런싱) 부하를 방지할 수 있다.
+
+* 보안 강화
+SSL에 대한 암복호화 처리에 WEBSERVER를 사용할 수 있다.
+
+* 무중단 운영
+WAS에서 오류가 발생한다면 이용하지 못하도록 한 후 WAS를 재시작하여 사용자는 오류를 느끼지 못하도록 WebServer에서 처리할 수 있다.
+
+* 여러 웹 어플리케이션 서비스 제공
+하나의 서버에서 PHP,JAVA Application을 함께 사용가능
+
+* 기타
+접근 IP 제어, 여러 대의 서버에서의 세션 관리등을 WebServer에서 처리하면 효율적이다.
+
+# 구조
+
+![](https://images.velog.io/images/dbtlwns/post/05347a25-ec7a-4dec-bfbc-145f9d96250e/image.png)
+1. Web Server는 클라이언트로부터 HTTP 요청을 받는다.
+2. Web Server는 클라이언트의 요청(Request)을 WAS에 보낸다.
+3. WAS는 관련된 Servlet을 메모리에 올린다.
+4. WAS는 web.xml을 참조하여 해당 Servlet에 대한 Thread를 생성한다. 
+5. HttpServletRequest와 HttpServletResponse 객체를 생성하여 Servlet에 전달한다.
+5-1. Thread는 Servlet의 service() 메서드를 호출한다.
+5-2. service() 메서드는 요청에 맞게 doGet() 또는 doPost() 메서드를 호출한다.
+6. doGet() 또는 doPost() 메서드는 인자에 맞게 생성된 적절한 동적 페이지를 Response 객체에 담아 WAS에 전달한다.
+7. WAS는 Response 객체를 HttpResponse 형태로 바꾸어 Web Server에 전달한다.
+8. 생성된 Thread를 종료하고, HttpServletRequest와 HttpServletResponse 객체를 제거한다.
+# 참고한 사이트
+[gmlwjd9405님 블로그](https://gmlwjd9405.github.io/2018/10/27/webserver-vs-was.html)
+[위키백과](https://ko.wikipedia.org/wiki/%EC%9B%B9_%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98_%EC%84%9C%EB%B2%84)
       
       
       
