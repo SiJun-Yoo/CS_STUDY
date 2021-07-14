@@ -428,7 +428,72 @@ WAS에서 오류가 발생한다면 이용하지 못하도록 한 후 WAS를 재
 [gmlwjd9405님 블로그](https://gmlwjd9405.github.io/2018/10/27/webserver-vs-was.html)
 [위키백과](https://ko.wikipedia.org/wiki/%EC%9B%B9_%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98_%EC%84%9C%EB%B2%84)
       
-      
+ # CORS (Cross Origin Resource Sharing, 교차 출처 리소스 공유)
+
++ CORS란
+
+  + 추가적인 HTTP 헤더를 사용해서 애플리케이션이 다른 출처의 선택한 자원에 접근할 수 있는 권한을 부여하도록 브라우저에 알려주는 체제
+
++ 출처 (Origin)
+
+  + 요청이 시작된 서버의 위치를 나타내는 문구
+
+    + URL 구조에서 Protocol, Host, Port까지 모두 합친 것을 의미
+
+    > 내가 Naver 로그인 서버로 로그인 요청을 한다고 가정한다.
+    > ![](https://images.velog.io/images/qjatn1009/post/ace03f16-c7fa-4d87-a707-4b43e824b506/image.png)
+    >
+    > 이때 서버 IP는 2개가 존재
+    >
+    > 1. Client 서버
+    > 2. 로그인 API 서버
+    >
+    > 예를 들어 Client 서버는 http://client:80/ 이고, 로그인 서버는 http://login:3000/이라고 가정하면,
+    >
+    > 그럼 클라이언트 서버가 로그인 서버에게 HTTP 요청을 보낼 때 Origin이 다르다고 표현한다.
+    >
+    > 이를 `Cross Origin`이라고 하고, 만약 로그인 서버와 내부 통신을 한다면 `Same Origin`이라고 한다.
+
+  + 같은 출처 vs 다른 출처
+  
+   ![](https://images.velog.io/images/qjatn1009/post/7818a197-d3f5-4f0e-99fa-ada9dd865548/image.png)
+
+#  SOP (Same Origin Policy, 동일 출처 정책)
+
++ SOP란
+
+  + 동일한 출처의 Origin만 리소스를 공유할 수 있도록하는 정책
+
++ SOP의 장점
+
+  + 동일 출처 정책을 지키면 외부 리소스를 가져오지 못해 불편하지만, XSS나 XSRF 등의 보안 취약점을 방어할 수 있다.
+
+    >**XSS (Cross Site Scripting, 사이트 간 스크립팅)** : 관리자가 아닌 권한이 없는 사용자가 웹 사이트에 스크립트를 삽입하는 공격
+    >
+    >**XSRF (Cross Site Request Forgery, 사이트 간 요청 위조) ** :  사용자가 자신의 의지와는 무관하게 공격자가 의도한 행위(수정, 삭제, 등록 등)를 웹사이트에 요청하게 하는 공격
+
+    
+
+# CORS 동작 원리
+
++ CORS의 동작 방식은 단순 요청 방법과 예비 요청을 먼저 보내는 방법 2가지 방법이 있다.
+
+  + ### Simple Request
+
+    + 서버에게 바로 요청을 보내는 방법
+
+    > 1. HTTP 통신 헤더인 `Origin` 헤더에 요청을 보내는 곳의 정보를 담고 서버로 요청을 보낸다.
+    > 2. 이후 서버는 `Access-Control-Allow-Origin` 헤더에 허용된 `Origin`이라는 정보를 담아 보낸다.
+    > 3. 클라이언트는 헤더의 값과 비교해 정상 응답임을 확인하고 지정된 요청을 보낸다.
+    > 4. 서버는 요청을 수행하고 200, OK 코드를 응답한다.
+
+  + ### Preflight Request
+
+    + 서버에 예비 요청을 보내서 안전한지 판단한 후 요청을 보내는 방법
+
+    > 1. `OPTIONS` 메서드로 서버에 예비 요청을 먼저 보낸다.
+    > 2. 서버는 예비 요청에 대한 응답으로 `Access-Control-Allow-Origin` 헤더를 포함한 응답으로 클라이언트에 보낸다.
+    > 3. `Simple Request` 와 같은 방법으로 수행
       
       
       
