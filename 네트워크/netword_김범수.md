@@ -455,6 +455,7 @@ WAS에서 오류가 발생한다면 이용하지 못하도록 한 후 WAS를 재
     > 이를 `Cross Origin`이라고 하고, 만약 로그인 서버와 내부 통신을 한다면 `Same Origin`이라고 한다.
 
   + 같은 출처 vs 다른 출처
+    + 기준 Origin : `https://beomy.github.io/tech/`
   
    ![](https://images.velog.io/images/qjatn1009/post/7818a197-d3f5-4f0e-99fa-ada9dd865548/image.png)
 
