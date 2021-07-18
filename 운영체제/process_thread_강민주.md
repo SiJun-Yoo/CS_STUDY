@@ -383,16 +383,16 @@ Heap 영역은 아래에서 위 방향으로 데이터를 저장해나가고, St
      - 이전의 Task의 PC값과 SP값을 PCB에 담아 저장합니다.
      ![6](https://user-images.githubusercontent.com/77487962/126058949-ed0bb661-19d1-4f84-8528-9d2a75c8c06e.PNG)
 
-     - Context 저장을 완료한 다음 Process X를 실행하게 됩니다.No Image
+     - Context 저장을 완료한 다음 Process X를 실행하게 됩니다.
      ![7](https://user-images.githubusercontent.com/77487962/126059002-69f9a919-cb93-4a20-8c07-2d913c4b8917.PNG)
 
      - Process X가 진행이 완료되고 다시 Context Switch가 발생하게 된다면 이전 Process로 돌아올 준비를 합니다.
      ![8](https://user-images.githubusercontent.com/77487962/126059009-5b681a83-3d0f-4a20-9185-0e5cc9f7aeaa.PNG)
 
-     - Stack에 담긴 PC, SP를 읽어 다시 CPU에 적재합니다.No Image
+     - Stack에 담긴 PC, SP를 읽어 다시 CPU에 적재합니다.
      ![9](https://user-images.githubusercontent.com/77487962/126059021-84a1f7bb-37ab-48cf-baab-468f8f02006e.PNG)
 
-     - 다시 돌아온 Context지만 다시 yield()를 발생시켰기 때문에 위 과정을 다시 반복진행합니다.No Image
+     - 다시 돌아온 Context지만 다시 yield()를 발생시켰기 때문에 위 과정을 다시 반복진행합니다.
      ![10](https://user-images.githubusercontent.com/77487962/126059027-c4686361-6553-435b-b5c3-8cecaab3d1e8.PNG)
   
   + Context Switching Cost
