@@ -268,7 +268,7 @@ Heap 영역은 아래에서 위 방향으로 데이터를 저장해나가고, St
       + Atomic(원자성)은 데이터베이스의 트랜잭션 ACID의 중 A이다. 하나의 트랙잭션은 모두 성공이거나 모두 실패여야 한다.
     + Mutual exclusion
       + 스레드에 락이나 세마포어를 걸어서 공유자원에는 하나의 스레드만 접근 가능하게 합니다. (Java의 synchronized)
-## 4. 동기화(Synchronization)
+## 4. 동기화(Synchronization)&비동기(Asynchronization)
   + 동기화란
     + 프로세스 또는 스레드들이 수행되는 시점을 조절하여 서로가 알고 있는 정보가 일치하는 것
   + 동기화가 필요한 이유
@@ -303,3 +303,104 @@ Heap 영역은 아래에서 위 방향으로 데이터를 저장해나가고, St
       * 세마포어는 뮤텍스가 될 수 있지만, 역은 성립하지 않음.
       * 세마포어는 다른 프로세스가 세마포어를 해제할 수 있지만, 뮤텍스는 락을 획득한 프로세스나 스레드만 가능
       ```
+  + 비동기화란
+    + '동기'가 아닌 것.
+  + 비동기식, 비동기적이다.
+    + 어떤 작업을 요청했을 때 그 작업이 종료될 때까지 기다리지 않고(작업을 위임하고), 다음 작업을 수행한다. 요청했던 작업이 끝나면 결과를 받고, 그에 따른 추가 작업이 있다면 수행한다.
+
+      + 요청 순서에 상관없이, 동시에 다수의 작업을 처리할 수 있다.
+      + 작업이 끝날 때 따로 이벤트를 감지하고 결과를 받아 그에 따른 추가 작업을 해줘야하기 때문에, 비교적 느릴 수 있다.
+      + I/O 작업이 잦고, 빠른 응답속도를 요구하는 프로그램에 적합하다.
+    
+      ### 4-1. 뮤텍스와 세마포어의 차이
+      - 뮤텍스(Mutex)
+        - 공유된 자원의 데이터를 여러 스레드가 접근하는 것을 막는 것
+        - 상호배제라고도 하며, Critical Section을 가진 스레드의 Running time이 서로 겹치지 않도록 각각 단독으로 실행하게 하는 기술이다.
+        - 다중 프로세스들의 공유 리소스에 대한 접근을 조율하기 위해 synchronized 또는 lock을 사용한다.
+           - 즉, 뮤텍스 객체를 두 스레드가 동시에 사용할 수 없다.
+      - 세마포어(Semaphore)
+        - 공유된 자원의 데이터를 여러 프로세스가 접근하는 것을 막는 것
+        - 리소스 상태를 나타내는 간단한 카운터로 생각할 수 있다.
+           - 운영체제 또는 커널의 한 지정된 저장장치 내의 값이다.
+           - 일반적으로 비교적 긴 시간을 확보하는 리소스에 대해 이용한다.
+           - 유닉스 시스템 프로그래밍에서 세마포어는 운영체제의 리소스를 경쟁적으로 사용하는 다중 프로세스에서 행동을 조정하거나 또는 동기화 시키는 기술이다.
+        - 공유 리소스에 접근할 수 있는 프로세스의 최대 허용치만큼 동시에 사용자가 접근하여 사용할 수 있다.
+        - 각 프로세스는 세마포어 값은 확인하고 변경할 수 있다.
+           - 사용 중이지 않는 자원의 경우 그 프로세스가 즉시 자원을 사용할 수 있다.
+           - 이미 다른 프로세스에 의해 사용 중이라는 사실을 알게 되면 재시도하기 전에 일정 시간을 기다려야 한다.
+           - 세마포어를 사용하는 프로세스는 그 값을 확인하고, 자원을 사용하는 동안에는 그 값을 변경함으로써 다른 세마포어 사용자들이 기다리도록 해야한다.
+        - 세마포어는 이진수 (0 또는 1)를 사용하거나, 또는 추가적인 값을 가질 수도 있다.
+      - 차이
+        1. 가장 큰 차이점은 관리하는 동기화 대상의 개수
+           - Mutex는 동기화 대상이 오직 하나뿐일 때, Semaphore는 동기화 대상이 하나 이상일 때 사용한다.
+        2. Semaphore는 Mutex가 될 수 있지만 Mutex는 Semaphore가 될 수 없다.
+           - Mutex는 상태가 0, 1 두 개 뿐인 binary Semaphore
+        3. Semaphore는 소유할 수 없는 반면, Mutex는 소유가 가능하며 소유주가 이에 대한 책임을 가진다.
+           - Mutex 의 경우 상태가 두개 뿐인 lock 이므로 lock 을 가질 수 있다.
+        4. Mutex의 경우 Mutex를 소유하고 있는 스레드가 이 Mutex를 해제할 수 있다. 하지만 Semaphore의 경우 이러한 Semaphore를 소유하지 않는 스레드가 Semaphore를 해제할 수 있다.
+        5. Semaphore는 시스템 범위에 걸쳐있고 파일시스템상의 파일 형태로 존재하는 반면 Mutex는 프로세스 범위를 가지며 프로세스가 종료될 때 자동으로 Clean up 된다.
+        
+## 5. Context Switching
+  + Computer가 매번 하나의 Task만 처리할 수 있다면?
+      해당 Task가 끝날때까지 다음 Task는 기다릴 수 밖에 없습니다.
+      또한 반응속도가 매우 느리고 사용하기 불편합니다.
+  + 그렇다면 다양한 사람들이 동시에 사용하는 것처럼 하기 위해선?
+      Computer multitasking을 통해 빠른 반응속도로 응답할 수 있습니다.
+      빠른 속도로 Task를 바꿔 가며 실행하기 때문에 사람의 눈으론 실시간처럼 보이게 되는 장점이 있습니다.
+      CPU가 Task를 바꿔 가며 실행하기 위해 Context Switching이 필요하게 되었습니다.
+  + Context Switching이란?
+     - 현재 진행하고 있는 Task(Process, Thread)의 상태를 저장하고 다음 진행할 Task의 상태 값을 읽어 적용하는 과정을 말한다.
+  + Context Switching 과정
+     - Task의 대부분 정보는 Register에 저장되고 PCB(Process Control Block)로 관리된다.
+        - 현재 실행하고 있는 Task의 PCB 정보를 저장한다. (Process Stack, Ready Queue)
+        - 다음 실행할 Task의 PCB 정보를 읽어 Register에 적재하고 CPU가 이전에 진행했던 과정을 연속적으로 수행할 수 있다.
+     - Context Switching Cost (Process vs Thread)
+        - Process Context Switching 비용 > Thread Context Switching 비용
+        - Thread는 Stack 영역을 제외한 모든 메모리를 공유하므로 Context Switching 수행 시 Stack 영역만 변경하면 되기 때문에 비용이 적게 든다.
+
+  + PCB(Process Control block) 구조
+     ![pcb](https://user-images.githubusercontent.com/77487962/126058774-e29be1c0-0c11-4998-aaac-7f49c22b6a19.PNG)
+     - Process State : 프로세스 상태(Create, Ready, Running, waiting, terminated)
+     - Process Counter : 다음 실행할 명령어의 주소값
+     - CPU Registers: accumulator, index register, stack pointers, general purpose registers.
+     
+  + Example
+     - i에 10을 넣고 Context Switching을 발생시키고 20넣고 Context Switching을 발생시키는 과정입니다.
+     ![1](https://user-images.githubusercontent.com/77487962/126058839-aafaf78f-2303-4d60-895c-3b99f34faf7e.PNG)
+
+     - yield()를 호출하여 CPU를 양보하여 Context Switching이 발생하게됩니다.
+     ![2](https://user-images.githubusercontent.com/77487962/126058868-d7cef579-bb43-4038-8ce1-11f8525c4f86.PNG)
+
+     - Context Switching을 위해 PC, SP값을 Stack에 저장하게 됩니다.
+     ![3](https://user-images.githubusercontent.com/77487962/126058897-e6893a65-2edc-4eab-86e1-3ef0334f402d.PNG)
+
+     - 현재 PC값과 SP값을 System Call yield()로 조정합니다.
+     ![4](https://user-images.githubusercontent.com/77487962/126058914-d4a94dc6-fc4e-4d61-8c08-294de136bc27.PNG)
+
+     - context Switching을 진행하기 위해 PC값을 변경합니다.
+     ![5](https://user-images.githubusercontent.com/77487962/126058937-e5d58019-14e0-41ab-af7f-f0a6f7d0ba19.PNG)
+
+     - 이전의 Task의 PC값과 SP값을 PCB에 담아 저장합니다.
+     ![6](https://user-images.githubusercontent.com/77487962/126058949-ed0bb661-19d1-4f84-8528-9d2a75c8c06e.PNG)
+
+     - Context 저장을 완료한 다음 Process X를 실행하게 됩니다.No Image
+     ![7](https://user-images.githubusercontent.com/77487962/126059002-69f9a919-cb93-4a20-8c07-2d913c4b8917.PNG)
+
+     - Process X가 진행이 완료되고 다시 Context Switch가 발생하게 된다면 이전 Process로 돌아올 준비를 합니다.
+     ![8](https://user-images.githubusercontent.com/77487962/126059009-5b681a83-3d0f-4a20-9185-0e5cc9f7aeaa.PNG)
+
+     - Stack에 담긴 PC, SP를 읽어 다시 CPU에 적재합니다.No Image
+     ![9](https://user-images.githubusercontent.com/77487962/126059021-84a1f7bb-37ab-48cf-baab-468f8f02006e.PNG)
+
+     - 다시 돌아온 Context지만 다시 yield()를 발생시켰기 때문에 위 과정을 다시 반복진행합니다.No Image
+     ![10](https://user-images.githubusercontent.com/77487962/126059027-c4686361-6553-435b-b5c3-8cecaab3d1e8.PNG)
+  
+  + Context Switching Cost
+     + Context Switching이 발생하게 되면 많은 Cost가 소요됩니다.
+          + Cache 초기화
+          + Memory Mapping 초기화
+          + Kernel은 항상 실행되어야 합니다. (메모리의 접근을 위해서..)
+  + Process vs Thread
+     + Context Switching 비용은 Process가 Thread보다 많이 듭니다.
+     + Thread는 Stack 영역을 제외한 모든 메모리를 공유하기 때문에
+     + Context Switching 발생시 Stack 영역만 변경을 진행하면 됩니다.
