@@ -495,18 +495,120 @@ WAS에서 오류가 발생한다면 이용하지 못하도록 한 후 WAS를 재
     > 1. `OPTIONS` 메서드로 서버에 예비 요청을 먼저 보낸다.
     > 2. 서버는 예비 요청에 대한 응답으로 `Access-Control-Allow-Origin` 헤더를 포함한 응답으로 클라이언트에 보낸다.
     > 3. `Simple Request` 와 같은 방법으로 수행
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+
+### REST
+- REST란 Representational State Transfer 의 약자로 소프트웨어 프로그램 개발의 아키텍처의 한 형식
+- Representational State Transfer- '대표적인 상태 전달' 
+  - '자원(resource)의 대표(representation)에 의한 상태 전달'
+  - 그럼 '자원의 대표'와 '상태 전달'이 무슨 뜻 일까?
+
+### 자원의 대표
+  - 여기서 '자원'이란 뜻은 넓은 의미로 해당 소프트웨어가 관리하는 모든 것이 될 수 있습니다. 
+    - ```문서```가 될 수도 있고 ```그림```이 될 수도 있고 ```데이터```가 될 수도 있고 심지어 ```해당 소프트웨어 자체```가 될 수도 있습니다. 
+    - 예를 들어 DB에 학생 명부가 저장되어 있다고 한다면 이 학생들의 정보가 자원이 됩니다. 
+  - 그리고 '자원의 대표'의 의미는 그 자원을 대표하기 위한 이름을 뜻합니다. 
+    - 학생데이터를 대표하기 위한 이름은 무엇이 좋을까요? 물론 학생(students:복수형을 사용합니다)입니다. 
+    - 학생 전체 명부가 아니라 명부상의 한 학생에 대한 자원을 얻고자 한다면 대표이름과 한 학생을 **특정할 수 있는 값(id 등)** 이 사용됩니다.
+
+### 상태 전달
+  - 데이터가 요청되어지는 시점에서 자원의 상태(정보)를 전달하는 것을 뜻합니다. 
+  - 데이터를 요청하는 시점에 따라 데이터가 바뀔 수도 있기 때문에 **'상태'** 라는 표현을 쓴 것이라 추측해 봅니다. 
+  - 프로그램이 학생 명부 전체 리스트를 요청받으면 요청받은 시점의 '상태' **즉, 데이터**를 전달하게 됩니다. 
+  - 또한 새로운 학생 명부 '상태'를 프로그램에 전달하여 해당 자원을 수정할 수도 있습니다.
+
+```
+이처럼 자원을 이름으로 구분하고 해당 자원의 상태를 주고 받는 모든 것이 REST라고 할 수 있지만, 
+일반적으로 REST라고 하면 좁은 의미로 HTTP를 통해 CRUD를 실행하는 API를 뜻합니다.
+```
+```
+HTTP 프로토콜을 이용하기 때문에 URL(route)를 통해 자원을 특정짓고 HTTP Verbs를 통해 할일(CRUD)을 지정합니다. 
+또한 JSON 혹은 XML를 통해 데이터를 주고 받는 것이 일반적입니다.
+```
+
+위 정의에 더하여 **REST를 정의**하기 위한 조건들은 다음과 같습니다.
+
+1. **'클라이언트-서버' 구조** : 자원(resource)이 있는 쪽이 서버가 되며, 요청을 하는 쪽이 해당 서버에 대한 클라이언트가 됩니다.
+2. **무상태(Stateless)** : '서버'는 각각의 요청을 완전히 별개의 것으로 인식하고 처리해야하며, 이전 요청이 다음 요청의 처리에 연관이 되어서는 안됩니다. 
+즉 서버 session을 사용해선 안됩니다. 
+서버의 처리 방식에 일관성을 부여하고 서버의 부담을 줄이기 위한 것으로 보입니다.
+3.** 캐시 처리 가능(Cacheable)** : 대량의 요청을 효율적으로 처리하기 위해 캐시가 요구됩니다.
+4. **계층화(Layered System)**
+5. **Code on demand (optional)**
+6. **인터페이스 일관성**
+
+### RESTful
+```
+REST는 위 정의들을 구현하는 방식에 제약을 두지 않기 때문에 구체적인 가이드라인이 없습니다. 
+RESTful은 REST의 비공식적 구현 가이드입니다. 반드시 따라야 하는 법칙을 만들어서 공표한 것이 아니라 여러 개발자들이 비공식적으로 의견을 제시한 것들의 모음으로. 
+즉 개발자마다 생각하는 RESTful의 내용이 다를 수도 있습니다.
+```
+RESTful 중 가장 대표적이며 보편적인 규칙이 확고하게 정해진 **RESTful routing**입니다. 
+참고로 이 외의 RESTful 에는 **header의 사용, return 구조, error code의 사용법** 등이 있습니다.
+
+
+|CRUD|HTTPverbs|Route|
+|------|---|---|
+resource들의 목록을 표시|GET|/resource
+resource 하나의 내용을 표시|GET|/resource/:id
+resource를 생성|POST|/resource
+resource를 수정|PUT|/resource/:id
+resource를 삭제|DELETE|/resource/:id
+- resource는 영어 복수형으로 적습니다
+- :id는 하나의 특정한 resource를 나타낼 수 있는 **고유의 값**입니다
+
+### 예제
+- student resource(데이터)를 관리하는 API를 생각해봅시다. student resource는 id, 이름, 수강하고 있는 과목들의 정보를 가지고 있습니다. 아래는 student resource의 예입니다.
+```
+{
+  "id": 1,
+  "firstName": "Tyrion",
+  "lastName": "Lannister",
+  "classes": [
+    {"id": 1, "name": "History of Westeros"}, 
+    {"id": 2, "name": "Brewing"}, 
+    {"id": 3, "name": "High Valyrian 101"}
+  ]
+}
+```
+- 이제 이러한 데이터를 DB에 생성(Create)하고, 호출(Read)하고, 수정(Update)하고, 삭제(Delete)하는 CRUD route를 구상해 봅시다.
+
+  - [POST] /students : 새 student를 등록
+  - [GET] /students : 전체 student list를 호출
+  - [GET] /students/1 : 1번 student를 호출
+  - [PUT] /students/1 : 1번 student의 정보를 수정
+  - [DELETE] /students/1 : 1번 student의 정보를 삭제
+
+```
+검색을 하기 위해서는 query를 사용합니다. 
+Query_이름=Query_값의 형태로 url을 통해 전달되는 정보들을 query라고 합니다. 
+url 뒤에 '?'를 붙인 후 query를 전달하며, 하나 이상의 query를 전달하기 위해서는 query들 사이에 '&'를 사용합니다. 
+성이 "Lannister"인 학생들을 검색하는 API의 주소는 [GET] /students?lastName=Lannister 로 설정할 수 있습니다. 
+물론 [GET] /students와는 별개로 해당 route을 처리하는 코드를 만들어 주어야 합니다.
+```
+
+- RESTful하지 못한 예:
+```
+CRUD(생성,조회,수정,삭제)기능을 모두 POST로만 처리하는 API
+Route에 resource, id 외 정보가 들어가는 경우 (예를 들어 [POST] /students/update -> 이 route을 RESTful하게 고치면 [PUT] students/:id 입니다.)
+```
+
+
+### RESTful API의 장점은?
+1. 정해진 규칙대로 routing 주소를 만들기 때문에 route 이름을 짓는 수고를 덜 수 있고, 통일성이 있습니다. 
+  1-1. 한 회사에 두개의 개발팀이 있습니다. 한 팀은 학생을 관리하는 API를 만들고, 다른 한팀은 교사를 관리하는 API를 만듭니다. 
+  1-2. 이때 두팀 모두 RESTful하게 API를 만들면 "students", "teachers"라는 resource 명을 제외한 나머지 API주소가 동일하게 됩니다. 
+  1-3. 만약 두팀이 RESTful하지 않게 API주소를 만든다면, 새로운 학생, 교사를 추가하는 API 주소는 /CreateStudent, /NewTeacher, /CreateNewStudent, /NewTeacher 등 다양하게 될 수 있다.
+  1-4. 나중에 양쪽 팀의 API를 동시에 사용하는 프로그램을 만드는 경우 이러한 비일관성은 불필요한 혼란을 불러올 수 있습니다.
+
+2. API의 확장이 쉽습니다. 
+  2-1.학생 API에서 과목을 관리하는 API를 추가하는 경우, 
+  2-2.[POST] students/:id/classes, [DELETE] students/:id/classes/:id 등과 같이 만들 수 있습니다. 
+  2-3.비 RESTful의 경우, 이 기능을 가지는 route의 주소이름을 따로 지어줘야 하는데.. 이름짓는데 시간과 노력이 들어가며, 그렇게 정해진 이름 역시 1번의 문제를 고스란히 가집니다.
+
+```
+**통일성과 확장성**이 RESTful API의 장점입니다. 
+정해진 규칙에 따라 API 주소, request구조, return 구조를 만들기 때문에 개발팀이 바뀌거나 하는 경우에도 혼란을 줄일 수 있습니다.
+```      
       
       
       
