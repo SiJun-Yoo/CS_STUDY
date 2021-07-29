@@ -404,3 +404,58 @@ Heap 영역은 아래에서 위 방향으로 데이터를 저장해나가고, St
      + Context Switching 비용은 Process가 Thread보다 많이 듭니다.
      + Thread는 Stack 영역을 제외한 모든 메모리를 공유하기 때문에
      + Context Switching 발생시 Stack 영역만 변경을 진행하면 됩니다.
+
+## 5. CPU 스케쥴링 알고리즘
+
+  + 조건 : 오버헤드 감소/ 사용률 증가
+     + Batch System: 가능하면 많은 일을 수행. 시간(time) 보단 처리량(throughout)이 중요
+     + Interactive System: 빠른 응답 시간. 적은 대기 시간.
+     + Real-time System: 기한(deadline) 맞추기.
+
+  + 선점형 VS 비선점형
+     + 선점형 알고리즘 : OS가 CPU의 사용권을 선점할 수 있는 경우, 강제 회수하는 경우 (라운드 로빈, 다단계 피드백 큐 스케쥴링, SRT)
+     + 비선점형 알고리즘 : 프로세스 종료 or I/O 등의 이벤트가 있을 때까지 실행 보장 (FCFS, SJF, HRN)
+
+  + 언제?
+     + 수행 -> 대기(running -> waiting) : I/O요청이 발생하거나 자식프로세스가 종료대기를 할 때 (비선점)
+     + 수행 -> 준비(running -> ready) : 인터럽트 발생 (선점)
+     + 대기 -> 준비(waiting -> ready) : I/O완료 (선점)
+     + 수행 -> 종료(running -> terminate) : 종료 (비선점)
+
+![image](https://user-images.githubusercontent.com/58085920/127463056-f1671e96-a94d-48ba-bfb2-1e478d35ba0d.png)
+>비선점형 스케쥴링
+
+  + First-Come, First-Served
+     + Queue에 먼저 도착한 순서대로 작업 수행
+     + 장점 : 간단하다.
+     + 단점 : Convery Effect (호위 효과) : burst time이 긴 Process가 먼저 도착한 경우, 그 Process가 실행할 동안 다른 Process들은 기다려야 한다.
+
+  + Shortest Job First
+     + 수행시간이 가장 짧다고 판단되는 작업 먼저 수행
+     + 장점 : 평균대기 시간을 줄이는 최적의방법
+     + 단점 : 실제로 실행 전에는 CPU Time을 알 수 없기 때문에 비현실적이다. 이 방법을 실제로 사용하려면 예측이 필요한데 예측을 위한 Overhead가 크다.
+
+>선점형 스케쥴링
+
+  + Priority Scheduling
+     + 우선순위가 높은 것을 먼저 서비스 해준다.
+     + 우선순위를 부여하는 방법
+        + 내부적인 요소 : Time Limit이 짧고, Memory를 작게 차지하고, CPU Time이 짧은 프로세스의 우선순위를 높여준다.
+        + 외부적인 요소 : 서버 컴퓨터의 경우 돈을 많이 낸 프로세스에 우선순위를 높여준다.
+     + 단점 : 우선순위가 낮은 프로세스가 무한정 기다리는 Starvation이 생길수 있음 
+        +  Aging : O/S가 Ready Queue를 주기적으로 확인하여 Ready Queue에 오래 머무는 프로세스의 우선순위를 점진적으로 높여준다.
+     
+  + Round Robin
+     +  실행의 최소 단위 시간인 Time Quantum(=Time Slice)을 최대 수행시간으로 하여 CPU가 실행하는 Process를 Switching한다. 시분할 시스템(Time Sharing System)에서 많이 사용되는 방법
+     +  단점 : 성능이 Time Quantum에 크기에 의존적
+     +  타임슬라이스, 타임퀀텀의 기준이 중요
+        + 너무크다면 FCFS알고리즘과 같아짐
+        + 너무 짧다면 문맥전환(Context Switching)이 자주 발생해 성능저하가 온다.
+
+  + Multilevel Queue Scheduling
+     + 프로세스는 System Process, Interactive Process, Batch Process등과 같이 성격에 따라 Grouping할 수 있다.
+     + Systme Process > Interactive Process > Batch Process 순으로 작업의 중요도가 크다..
+     + System Process : O/S의 작업(가상메모리 매핑, 파일 읽기, 통신..)
+     + Interactive Process : 사용자와 대화하는 프로그램 (워드와 같은 Editing Process)
+     + Batch Process : 일괄처리
+     + 프로세스의 그룹별로 다른 Queue에 줄을 세운다. 각 Queue는 절대적인 우선순위가 존재하거나 차등적으로 CPU시간을 부여받고 또는 다른 Scheduling방식을 채택할 수 있다.
