@@ -392,3 +392,87 @@ update와 delete는 인덱스를 삭제하는게 아니라 사용하지  않음 
    또한 단점에서도 명확하듯이 데이터 중복이 발생할 수 있으며 `중복된 데이터가 변경될 시`에는 `모든 컬렉션에서 수정`을 해야 합니다.<br />
    이러한 특징들을 기반으로 Update가 많이 이루어지지 않는 시스템이 좋으며,<br />
    또한 Scale-out이 가능하다는 장점을 활용해 막대한 데이터를 저장해야 해서 Database를 Scale-Out를 해야 되는 시스템에 적합합니다.
+
+### JDBC vs SQLMapper vs ORM
+
+> 공통점 
+
+* Persistence(영속성): 프로그램의 실행이 종료되더라도 사라지지 않는 데이터의 특성
+#### JDBC (Java Database Connectivity)
+![](https://images.velog.io/images/dbtlwns/post/03e2f8c5-963e-47cd-9a63-5d440c515700/image.png)
+* 자바에서 데이터베이스에 접속할 수 있도록 하는 자바 API
+* 각 DB와의 연결을 드라이버를 통해 하며 DB종류에 종속적이지 않다.
+* 중복 코드가 많고 Connection관리를 계속 해야함.
+
+#### SQLMapper
+* 객체(Object)와 SQL 문을 매핑하여 데이터를 객체화하는 기술
+* 객체와 관계를 매핑하기보다는 SQL문의 질의 결과와 객체를 매핑시켜줌
+> Spring JDBC
+
+![](https://images.velog.io/images/dbtlwns/post/66765372-2445-4288-a189-edfba829befc/image.png)
+* JDBC API만을 사용할 때보다, Connection에 대한 Configuration을 JdbcTemplate이라는 클래스에 담아 Spring을 통해 주입받음. 또, 메소드에 쿼리를 매핑해두고 RowMapper를 통해 쿼리 메소드의 결과를 통해 DB의 각 row마다 하나의 인스턴스화를 지원해준다.
+
+> MyBatis
+
+* 복잡한 JDBC 코드가 없다.
+* 결과값을 매핑하는 객체가 없다.
+* 설정이 간단하고 Java 코드에서 SQL을 쓰는 것을 분리했다. 즉 관심사를 분리하였다.
+![](https://images.velog.io/images/dbtlwns/post/db1450c3-b510-4712-9d0b-1e394c6fcd85/image.png)
+#### 한계점
+```java
+public class Student{
+	private int id;
+    	private String name;
+}
+```
+* Student라는 클래스가 있다.
+```java
+public class Student{
+	private int id;
+    	private String name;
+    	private String nickName;//새로 추가됨
+}
+```
+* nickName이라는 멤버변수가 추가된다면 SQL구문도 다 수정이 필요하다.(강한 의존 관계)
+```java
+public class Student{
+	private int id;
+    	private String name;
+    	private Team team; // 새로 추가됨
+}
+```
+* team이라는 객체가 또 추가 된다면?
+* 멤버변수가 객체인 class는 실제 RDB에서는 Team의 id를 외래키로 관계를 표현해주는 형태로 나타낼 것 이다. 객체지향과 RDB에서의 괴리감이 있다.(패러다임의 불일치)
+> **물리적으로 SQL과 JDBC API를 데이터 접근 계층에 숨기는데 성공했을지는 몰라도, 논리적으로는 엔티티와 아주 강한 의존 관계를 가지고 있다.** - 김영한님  
+#### ORM
+> JPA(Java Persistence API)
+
+![](https://images.velog.io/images/dbtlwns/post/1b252cf5-7849-4c9d-9ab8-328bd49de1bf/image.png)
+* JPA는 표준 인터페이스가 있다.
+* 이를 구현하는 구현체중 하나가 Hibernate이고, 그 외 다양하게 존재한다.
+* 핵심모델은 EntityManager와 영속성 컨텍스트이다.
+![](https://images.velog.io/images/dbtlwns/post/74e862aa-b1a1-49a5-8596-94ebdf5e5737/image.png)
+* EntityManager가 Entity를 관리함
+* Entity는 persist를 통해 PersistenceContext에 올라옴
+* 그 상태에서 EntityManager에게 관리를 받음
+* flush()가 발생하면 DB에 접근하고 SQL을 생성함.
+* 쿼리를 개발자가 관리하지 않고 EntityManager에게 위임
+![](https://images.velog.io/images/dbtlwns/post/5315f608-3f71-469c-877b-3abd8945335b/image.png)
+* Lazy Loading: 사용 상황에 알맞게 Proxy 객체를 사용해 필요한 정보만 가져오기 위한 Concept
+* Dirty Checking: 해당 객체의 변경 사항만 관리하는 Concept
+* Caching: DB의 Connection을 최소화해 효율적으로 사용할 수 있도록 가능하면 Cache를 사용하는 Concept
+
+> Spring Data JPA
+
+* SpringData진영에서 만든 JPA
+* EntityManager가 복잡하기 때문에 Spring에서 한번 더 추상화를 해 개발자가 보다 편리하게 이를 이용할 수 있도록 제공
+*  interface 형태로 Repository를 제공해 개발자는 이를 가져다 사용
+![](https://images.velog.io/images/dbtlwns/post/fae810bd-c7eb-4884-9cb2-9c7ef55e0deb/image.png)
+
+> Spring Data JDBC
+
+![](https://images.velog.io/images/dbtlwns/post/e532f89e-f8ab-42fa-b524-63baf2044417/image.png)
+* Hibernate와 같은 기술을 사용하지 않고 JDBC API를 그대로 직접 구현해서 사용하는 방식으로 동작된다. 
+* Spring Data 이므로 Repository 개념은 그대로 갖고 있다.
+
+
