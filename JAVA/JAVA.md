@@ -141,3 +141,87 @@ public class EnumTest {
 }
 ```
 ![image](https://user-images.githubusercontent.com/58085920/129336088-c9657ef5-9e94-46da-b34e-09c3dbdbc116.png)
+
+# 제네릭 (Generic)
+
++ #### 제네릭이란
+
+  + 클래스 내부에서 사용할 데이터 타입을 외부에서 지정하는 기법을 의미
+
++ #### 제네릭의 장점
+
+  1. 제네릭을 사용하면 잘못된 타입이 들어올 수 있는 것을 컴파일 단계에서 방지
+  2. 클래스 외부에서 타입을 지정하기 때문에 타입을 체크, 변환해줄 필요가 없다.
+  3. 비슷한 기능을 지원하는 경우 코드의 재사용성이 높아진다.
+
++ #### 제네릭 사용방법
+ ![](https://images.velog.io/images/qjatn1009/post/c39e2284-7d3d-4b04-8821-766e7d361aa6/image.png)
+  + 클래스 및 인터페이스 선언
+    ```java
+    public class ClassName <T> { ... }
+    public interface InterfaceName <T> { ... }
+    ```
+    기본적으로 클래스나 인터페이스는 위와 같이 선언 T 타입은 { ... } 안에서까지 유효하다.
+    ```java
+    public class ClassName <K, V> { ... }
+    ```
+    이렇게 타입 인자를 두 개 받아 선언도 가능하다. 자바의 HashMap도 이러한 형식이다.
+
+  + 제네릭 메소드
+
+    ```java
+    public <T> T genericMethod(T o) { ... } 
+    [접근 제어자] <제네릭 타입> [반환타입] [메소드 명]([제네릭 타입][파라미터])
+    ```
+
+  + 제한된 제네릭과 와일드 카드
+
+    + 위의 예시는 타입을 T라고 하고 외부에서 Integer을 파라미터로 보내면 T는 Integer가 되고 String을 보내면 T는 String이 되고, Student라는 클래스를 보내면 T는 Student가 된다. 이와 달리 특정 범위 내로 제한하는 방법이다.
+
+    + extends, super, ?가 있다. 
+
+      > `<K extends T>`  : T와 T의 자손 타입만 가능
+      >
+      > `<K super T> ` : T와 T 부모(조상) 타입만 가능
+      >
+      > `<? extends T >` : T와 T의 자손 타입만 가능
+      >
+      > `<? super T>` : T와 T 부모(조상) 타입만 가능
+      >
+      > `<?>` : 모든 타입 가능, `<? extends Object>`와 같은 의미
+
+      + `extends T` : 상한 경계
+      + `? super T` : 하한 경계
+      + `<?>` : 와일드 카드(Wild card)
+
+    + `K extends T`와 `? extends T`와 비슷한 구조이지만 차이점이 있다. K는 특정 타입으로 지정되지만, ? 는 타입이 지정되지 않는다는 의미이다.
+
+    + `PriorityQueue`에서의 사용 예시
+      ```java
+      public static class SoltClass <E extends Comparable<E>>{ }
+      	
+      	public static class SoltClass1 <E extends Comparable<? super E>>{}
+      	
+      	public static class Person {
+      		int age;
+      	}
+      	
+      	public static class Student extends Person implements Comparable<Person>{
+      
+      		@Override
+      		public int compareTo(Person o) {
+      			return Integer.compare(this.age, o.age);
+      		}
+      		
+      	}
+
+      	public static void main(String[] args) {
+      		SoltClass<Student> a = new SoltClass<Student>();
+      		SoltClass1<Student> b = new SoltClass1<Student>();
+      	}
+      ```
+
+      + 사용시 SoltClass<Student> a = new SoltClass<Student>();는 에러가 발생
+        + Person 객체로 Comparable를 선언했기 때문에 SoltClass에선 `Comparable<Student>`로 인식하기 때문인듯 하다. `Student`클래스에서 `Comparable<Student>`로 변환하면 둘다 작동을 하는 것을 볼 수 있다.
+
+  > 참고사항 : https://st-lab.tistory.com/153
