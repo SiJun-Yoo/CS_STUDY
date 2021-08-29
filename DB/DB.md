@@ -535,3 +535,42 @@ https://zzozzomin08.tistory.com/12
     - 여러 테이블에서 데이터를 자주 추출할 때 차라리 하나의 중복 테이블을 추가하는 방법
 * 중복 속성 추가
     - 조인해서 데이터를 처리할 때 데이터를 조회하는 경로를 단축하기 위해 사용
+# 레디스 (Redis)
+
++ #### NOSQL(Not Only SQL)란
+
+  + RDBMS는 `관계형 데이터베이스` 라고 하며, NOSQL은 `비관계형 데이터베이스`이다. 보통 NOSQL은 `Key-Value형(키-벨류형)`, `Wide Column형(열 지향와디이드형)`,`Document형(문서형)`을 이용한다.
+
+> `NOSQL`은 왜 사용하나?
+>
+> ​	아주 많은 양의 데이터를 효율적으로 처리가 필요할 때, 데이터의 분산처리, 빠른 쓰기 및 데이터의 안정성이 필요할 때 사용
+>
+> ​	특정서버에 장애가 발생했을 때에도 데이터 유실이나 서비스 중지가 없는 형태의 구조이기 때문이다.	
+
+
+
++ #### 레디스(Redis)란
+
+  + REDIS(REmote Dictionary Server)는 메모리 기반의 `Key-Value형` 구조 데이터 관리 시스템이며, 모든 데이터를 메모리에 저장하고 조회하기에 빠른 Read, Write 속도를 보장하는 비 관계형 데이터베이스
+  + Redis는 크게 5가지 `String`,`Set`,`Sorted Set`, `Hash`, `List`의 데이터 형식을 지원
+  + Redis는 빠른 오픈 소스인 메모리 키-값 데이터 구조 스토어이며, 다양한 인 메모리 데이터 구조 집합을 제공하므로 사용자 정의 애플리케이션을 손쉽게 생성할 수 있다.
+
+
+
++ #### Redis와 Memcached 비교
+
+ ![](https://images.velog.io/images/qjatn1009/post/b77ddc01-3e70-4499-906f-ae00f32cd0d6/image.png)
+
+  > 추가
+  >
+  > 1. Memcached는 멀티 스레드를 지원하고 Redis는 싱글스레드 기반 동작
+  >
+  >    > Redis는 싱글 스레드이기 때문에 처리 시간이 긴 명령어가 들어오면 그 뒤 명령어들은 전부 대기가 필요
+
+
+
+
+
+> Redis 추가적인 내용
+>
+> <https://velog.io/@hyeondev/Redis-란-무엇일까>
