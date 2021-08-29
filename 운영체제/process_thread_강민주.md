@@ -478,3 +478,74 @@ Heap 영역은 아래에서 위 방향으로 데이터를 저장해나가고, St
      + Interactive Process : 사용자와 대화하는 프로그램 (워드와 같은 Editing Process)
      + Batch Process : 일괄처리
      + 프로세스의 그룹별로 다른 Queue에 줄을 세운다. 각 Queue는 절대적인 우선순위가 존재하거나 차등적으로 CPU시간을 부여받고 또는 다른 Scheduling방식을 채택할 수 있다.
+
+# 캐시 (Cache)
+
++ #### 캐시란
+
+  + CPU 칩 안에 들어가는 작고 빠른 메모리
+  + 데이터나 값을 미리 복사해 놓는 임시 장소
+
++ #### 캐시 사용하는 이유
+![](https://images.velog.io/images/qjatn1009/post/35823a1a-8df2-4dfc-b9b8-23877861176d/image.png)
+
+  + Main Memory와 CPU 사이에 존재하여 자주 쓰이는 데이터를 저장하여 데이터를 읽기 위해 Main Memory에 접근하지 않아 시간이 단축된다.
+
++ #### 캐시 메모리 작동원리
+
+
+  ```java
+  for(int i = 0; i < 10; i++){
+      arr[i] = i;
+  }
+  ```
+
+  + ##### 시간 지역성 (Temporal locality)
+
+    + 최근 접근한 데이터에 다시 접근하는 경향
+      + 위 루프의 경우 변수 `i`는 짧은 시간 안에 여러번 접근이 이루어진다.
+    + `for`, `while` 같은 반복문에 사용하는 조건 변수처럼 한 번 참조된 데이터는 잠시 후 또 참조될 가능성이 높음
+
+  + ##### 공간지역성 (Spatical locality)
+
+    + 최근 접근한 데이터의 주변 공간에 다시 접근하는 경향
+      + 위 루프의 경우 `arr`의 주변 데이터가 참조된다.
+
+>`Cache HIT` : CPU가 요청한 데이터가 캐시에 존재하는 경우
+>
+>`Cache MISS` : CPU가 요청한 데이터가 캐시에 없어 메모리에서 가져오는 경우 
+
++ #### 캐시 미스 (Cache MISS) 경우 3가지
+
+  + Conflict miss
+
+    + 캐시메모리에 A, B 데이터를 저장해야하는데 A와 B가 같은 캐시 메모리 주소에 할당되어서 발생하는 Miss이다.
+
+  + Capacity miss
+
+    + 캐시의 용량이 부족하여 발생하는 Miss이다.
+
+      > 32k Direct Mapperd Cache를 달고 있는 컴퓨터에서 128k Array  Data를 접근하는 경우 Array Data를 모두 저장할 수 없으므로 용량 부족에 의한 캐시 미스가 발생
+
+  + Cold miss
+
+    + 해당 메모리 주소를 처음 불러서 나는 Miss이다.
+
++ #### 캐시 구조 및 작동 방식
+
+  + Direct Mapped Cache
+    + 메모리 주소에 기반을 두고 할당하는 방식
+    + 인덱스가 가리키는 공간이 하나인 경우
+    + 간단하고 빠르지만 `Conflict Miss`가 발생한다.
+  + Fully Associative Cache
+    + 비어있는 캐시 메모리가 있으면 마음대로 주소를 저장하는 방식
+    + 인덱스가 모든 공간을 가리키는 경우
+    + 인덱스 값을 이용해 필요한 주소를 가지고 있는 집합을 선정하고, 선정된 집합 내 모든 블록의 태그를 비교한다.
+    + 저장할 때는 간단하지만 조건이나 규칙이 없어 모든 블록을 찾아 원하는 데이터가 있는지 검사해야한다. (원하는 데이터를 찾기 위해 Cache Set을 모두 확인하여 시간이 꽤 걸림)
+  + Set Associative Cache
+    + Direct + Fully 방식으로 특정 set을 정해놓고 (Cache line을 묶은 것이 Cache Set)  그 중 비어있는 아무 곳에 저장
+    + 인덱스가 가리키는 공간이 두 개 이상인 경우, `n-way set associative`라고 부름
+
+  > [캐시 작동 과정](https://parksb.github.io/article/29.html)
+
+
