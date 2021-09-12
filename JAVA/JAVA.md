@@ -225,3 +225,83 @@ public class EnumTest {
         + Person 객체로 Comparable를 선언했기 때문에 SoltClass에선 `Comparable<Student>`로 인식하기 때문인듯 하다. `Student`클래스에서 `Comparable<Student>`로 변환하면 둘다 작동을 하는 것을 볼 수 있다.
 
   > 참고사항 : https://st-lab.tistory.com/153
+ 
+ # 자바 8버전
+> 자바는 8버전에서 많은 사항들이 추가되었고 많이 사용되는 버전이기도 하다.
+람다,스트림등 여러 기능이 추가 되었다.
+이번에는 자바 8에서 어떤 기능들이 추가되었는지 알아보자.
+
+# 람다 표현식
+> 람다 표현식이란?
+
+* 함수형 프로그래밍
+
+식별자 없이 실행할 수 있는 함수표현식을 의미하며 익명함수라고 부른다.
+람다표현식은 불필요한 코드의 작성을 줄여주고 가독성을 높여준다.
+가장 크게 스레드의 생성 방식에서 그 차이를 알 수 있다.
+```java
+new Thread(new Runnable() {
+    public void run() {
+        System.out.println("람다가 아닌 기존 익명함수를 이용한 스레드 생성");
+    }
+}).start();
+
+new Thread(()->{
+    System.out.println("람다를 이용한 스레드 생성");
+}).start();
+```
+
+# 스트림 API
+
+* 데이터를 추상화하여  다양한 방식으로 저장된 데이터를 읽고 쓰는 방법을 제공하는 API
+* 배열이나 컬렉션뿐 아니라 파일에 저장된 데이터도 스트림을 통해 제어가능
+* 반복문이나 반복자를 매번사용하지 않아도 됨
+
+```java
+private static final int BEST_SCORE = 100;
+List<Node> nodes = new ArrayList<>();
+List<Node> list = new ArrayList<>();
+
+//기존의 반복문을 이용한 방식
+for(Node node : nodes){
+	if(node.getScore() == BEST_SCORE){
+    	pickedList.add(node);
+    }
+}
+//stream을 이용한 방식
+list.stream().filter(node -> node.getScore() == BEST_SCORE).collect(toList());
+```
+
+# Interface Default Method
+* 인터페이스에서 구현체를 인터페이스 자체에서 기본으로 제공가능
+```java
+public interface Sized{
+	int size();//기존의 인터페이스 처럼 선언 해놓고 오버라이딩
+    
+	default boolean isEmpty() {  // Default Method
+		return size() == 0;
+	}
+}
+```
+# Java.time
+* 기존에 Calendar클래스를 사용했지만 아래와 같은 문제점 발생
+
+>
+* Calendar 인스턴스는 immutable object가 아니라서 값이 수정될 수 있다.
+* 윤초와 같은 특별한 상황을 고려하지 않습니다.
+* Calendar 클래스에서는 월을 나타낼 때 1~12가 아닌 0~11로 표현해야한다.
+
+* LocalDateTime, LocalDate라는 클래스를 사용하게 됨
+```java
+LocalDate today = LocalDate.now();
+System.out.println("올해는" + today.getYear() + "년입니다.");
+
+LocalDateTime time = LocalDateTime.now();
+System.out.println(time.plusMinutes(60));
+```
+
+# Optional Class
+* Optional<T>로 캡슐화를 하여 NullPointerException을 막는다
+* 값이 존재한다면 값을 Optional클래스가 감싼다.
+* 값이 존재하지 않는다면 Optional.empty메소드로 리턴함
+
