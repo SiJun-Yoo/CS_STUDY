@@ -305,3 +305,104 @@ System.out.println(time.plusMinutes(60));
 * 값이 존재한다면 값을 Optional클래스가 감싼다.
 * 값이 존재하지 않는다면 Optional.empty메소드로 리턴함
 
+# 영속성 컨텍스트
+> 엔티티를 영구적으로 저장하는 환경이라는 뜻(논리적 개념)
+
+* 엔티티 매니저를 통해 영속성 컨텍스트에 접근
+* JPA는 쓰레드 생성마다(요청 생성) EntityManagerFactory에서 EntityManager를 생성함
+* 엔티티 매니저를 통해 영속성 컨텍스트에 접근하고 관리할 수 있다.
+
+# 엔티티의 생명주기
+* **비영속(new)**
+  * 영속성 컨텍스트와 전혀 관계가 없는 새로운 상태
+  * 객체를 생성만함
+  ```java
+   Member member = new Member();
+  ```
+* **영속(managed)**
+  * 영속성 컨텍스트에 관리 되는 상태
+  ```java
+   em.persist(member);
+  ```
+* **준영속(detached)**
+  * 영속성 컨텍스트에 저장되었다가 분리된 상태
+  ```java
+   em.detach(member);
+   em.clear();
+   em.close();
+  ```
+* **삭제(removed)**
+  * 삭제된 상태
+  ```java
+   em.remove(member);
+  ```
+  
+![](https://images.velog.io/images/dbtlwns/post/bb4bef62-ab62-4051-ab7b-624941c63e4d/image.png)
+
+# 영속성 컨텍스트를 왜 사용할까?
+
+### 1차캐시
+ * 영속성 컨텍스트 내부의 캐시
+``` java
+    Member member = new Member();
+    member.setId("simba");
+    em.persist(member);
+    Member findMember1 = em.find(Member.class,"simba"); //1차 캐시 조회
+    Member findMember2 = em.find(Member.class,"sijun");
+    //1차캐시 조회 -> DB조회 -> 1차 캐시 갱신 -> 반환
+```
+ 
+###  동일성 보장
+* 엔티티의 동일성을 보장함
+``` java
+    Member findMember1 = em.find(Member.class,"simba"); 
+    Member findMember2 = em.find(Member.class,"simba");
+    if(findMember1 == findMember2){ // true
+    	System.out.println("같은 객체입니다.");
+    }
+```
+
+### 트랜잭션을 지원하는 쓰기 지연
+* 말그대로 (데이터베이스에)쓰기를 지연
+``` java
+    transaction.begin();
+    em.persist(member);
+    //insert 쿼리가 날라가지 않음
+    //로직
+    //로직끝
+    transaction.commit();
+    //insert 쿼리가 날라감
+```
+### 변경 감지
+* 엔티티 수정을 감지
+* 영속상태의 엔티티만 적용
+``` java
+    transaction.begin(); 
+    Member member = em.find(Member.class, "member");
+    // 영속 엔티티 데이터 수정
+    member.setUsername("helloworld");
+    //em.update(member); 이런코드 없음
+    transaction.commit();
+```
+
+# 플러시
+> 영속성 컨텍스트의 변경내용을 데이터베이스에 반영
+
+### 플러시 발생
+* 변경감지
+
+* 수정된 엔티티 쓰기 지연 SQL저장소에 등록
+
+* 쓰기지연 SQL 저장소의 쿼리를 데이터베이스에 전송
+
+### 플러시가 하는 법
+
+* em.flush();
+
+* ransaction.commit();
+
+* JPQL 쿼리 실행시 자동 호출
+
+# 참고한 곳
+
+[김영한님의 자바 ORM 표준 JPA프로그래밍](https://www.inflearn.com/course/ORM-JPA-Basic/dashboard)
