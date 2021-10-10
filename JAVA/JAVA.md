@@ -408,7 +408,8 @@ System.out.println(time.plusMinutes(60));
 
 [김영한님의 자바 ORM 표준 JPA프로그래밍](https://www.inflearn.com/course/ORM-JPA-Basic/dashboard)
 
-	# 의존성 주입
+	
+# 의존성 주입
 > 스프링을 사용하는 큰 이유중 하나인 의존성주입. 스프링에서는 Ioc컨테이너에 빈으로 등록된다면 @Autowired 어노테이션을 통해 의존성 주입이 가능하다. 생성자,setter,필드 총 3가지로 의존성 주입이 가능하다. 
 
 # 필드 주입
