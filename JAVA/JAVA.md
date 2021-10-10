@@ -29,6 +29,7 @@ person.setName("MangKyu");
 (물론 Java에서도 **System.gc()**를 이용해 호출할 수 있지만, 해당 메소드를 호출하는 것은 **시스템의 성능에 매우 큰 영향**을 미치므로 절대 호출해서는 안된다.)
 
  
+ 
 
  
 
@@ -406,3 +407,107 @@ System.out.println(time.plusMinutes(60));
 # 참고한 곳
 
 [김영한님의 자바 ORM 표준 JPA프로그래밍](https://www.inflearn.com/course/ORM-JPA-Basic/dashboard)
+
+	# 의존성 주입
+> 스프링을 사용하는 큰 이유중 하나인 의존성주입. 스프링에서는 Ioc컨테이너에 빈으로 등록된다면 @Autowired 어노테이션을 통해 의존성 주입이 가능하다. 생성자,setter,필드 총 3가지로 의존성 주입이 가능하다. 
+
+# 필드 주입
+> 필드를 통해 의존성을 주입함
+
+```java
+@Controller
+public class MemberController{
+	@Autowired
+	private MemberService memberService;
+}
+```
+
+* 장점
+  * 그중에서도 가장 간단하다.
+
+* 단점
+  * 의존 관계가 눈에 잘 보이지 않아 추상적이며, 의존관계가 과도하게 복잡해질 수 있음
+  * 외부에서 변경이 불가능함 -> 테스트가 용이하지 않음
+  * DI Container와 강한 결합을 가짐 -> 단위테스트가 용이하지 않음
+  * 의존성 주입 대상 필드가 final 선언 불가함
+
+# Setter 주입
+> setter메소드를 통해 의존성을 주입함
+
+```java
+@Controller
+public class MemberController{
+	private MemberService memberService;
+    
+    @Autowired
+    public void setMemberService(MemberService memberService){
+    	this.memberService = memberService;
+    }
+}
+```
+
+* 장점
+  * 의존성이 선택적으로 필요한 경우 사용
+  * 생성자 주입에 비해 복잡하지 않음
+
+* 단점
+  * 의존성 주입 대상 필드가 final 선언 불가함
+  * NullPointerException의 위험이 있고 런타임시점에 알수있다.
+  
+```java
+@Service
+public class MemberService{
+	@Autowired
+	private MemberRepository memberRepository;
+    
+    @Override
+    public void register(Member member){
+    	memberRepository.insertMember(member);
+    }
+}
+
+public class MemberServiceTest {
+	@Test
+    public void addTest() { 
+    	MemberService memberService = new MemberServiceImpl();
+        memberService.register(new Member("dbtlwns",1234)); 
+    } 
+}
+```
+>위 코드에서 테스트코드 순수자바코드이다. 그렇기에 DI프레임워크 위에서 동작하지 않기때문에 의존관계는 주입이 되지 않는다. 그래서 memberRepository는 null이라 에러가 발생할 것 이고 Setter를 통해 해결한다면 OCP를 위반한다. 하지만 생성자를 주입하여 사용하면 컴파일 시점에 객체를 주입받아 테스트코드 작성이 가능하며 주입하는 객체가 누락된 경우 컴파일시점에 오류를 발견할 수 있다.
+
+# 생성자 주입
+> 클래스의 생성자를 통해 의존성을 주입함
+
+```java
+@Controller
+public class MemberController{
+	private MemberService memberService;
+    
+    @Autowired
+    public MemberController(MemberService memberService){
+    	this.memberService = memberService;
+    }
+}
+```
+
+* 장점
+  * 필수적으로 사용해야 하는 레퍼런스 없이는 인스턴스를 만들지 못하도록 강제함
+  * Spring 4.3 이상부터는 생성자가 하나인 경우 @Autowired를 사용하지 않아도 됨
+  * 순환참조 의존성을 알아 차릴 수 있음 
+  * NullPointerException을 방지할 수 있다.
+  * 의존성 주입 대상 필드를 final로 불변 객체 선언할 수 있음
+
+
+* **lombok을 이용한 생성자 주입**
+* final 혹은 @NonNull이 붙은 필드에 대해 생성자를 생성해줌
+```java
+@RequiredArgsConstructor
+public class MemberController{
+	private final MemberService memberService;
+}
+```
+
+# 순환참조?
+
+> A가 B를 참조하고 B가 A를 참조하는 상황
