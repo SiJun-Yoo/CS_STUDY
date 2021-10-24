@@ -512,3 +512,131 @@ public class MemberController{
 # 순환참조?
 
 > A가 B를 참조하고 B가 A를 참조하는 상황
+	
+	# 객체지향 5대원칙
+
+* SOLID원칙
+> 
+SRP(단일 책임 원칙)
+OCP(개방-폐쇄 원칙)
+LSP(리스코프 치환 원칙)
+DIP(의존 역전 원칙)
+ISP(인터페이스 분리 원칙)
+
+# Single Responsiblity Principle(단일 책임 원칙)
+* **소프트웨어의 설계 부품(클래스, 함수 등)은 단 하나의 책임만을 가져야 한다.**
+* **클래스나 함수등은 관련된 책임만 줘야한다.**
+```java
+class UserAction{
+    private Long id;
+    private String name;
+    private Integer age;
+    public void sleep(){};
+    public void sing(){};
+    public void cook(){};
+}
+```
+>
+위 클래스는 유저를 정의하고 유저의 행위들을 메소드로 표현한 것 이다.
+하지만 정말 한곳에 때려박았기 때문에 SRP를 위배한다.
+즉 클래스는 목적과 취지에 맞는 속성과 메소드로 구성을 해야한다.
+
+# Open Closed Principle(개방-폐쇄 원칙)
+* **기존의 코드를 변경하지 않고(Closed)기능을 수정하거나 추가할 수 있도록 설계해야 한다.**
+```java
+//수정전
+class SoundPlayer{
+	void play(){
+    	System.out.println("play wav");
+    }
+}
+public class Client{
+	public static void main(String[] args){
+    	SoundPlayer sp = new SoundPlayer();
+        sp.play();
+    }
+}
+```
+wav를 실행하는 코드라고 할 때 mp3를 실행하는 코드를 만들기 위해서는 play메소드를 수정해야한다. 이것은 OCP원칙에 위배됨
+```java
+interface playAlgorithm{
+	void play();
+}
+class Wav implements playAlgorithm{
+	@Override
+    public void play(){
+    	System.out.println("play wav");
+    }
+}
+class Mp3 implements playAlgorithm{
+	@Override
+    public void play(){
+    	System.out.println("play mp3");
+    }
+}
+```
+상위클래스의 수정은 필요없고 play만 재정의 하여 OCP를 지킨다.
+# Liskov Substitution Principle(리스코프 치환 원칙)
+* **하위클래스는 상위클래스에서 가능한 행위를 수행할 수 있어야 한다.**
+* **객체 지향은 인간이 실세계를 보면서 느끼고 논리적으로 이해한 것과 똑같이 프로그래밍하는 게 목적이기 때문에 논리적으로 맞아 떨어져한다.**
+
+```java
+class Parent{
+    
+}
+class Child extends Parent{
+    
+}
+
+class Animal{
+    
+}
+class Tiger extends Animal{
+    
+}
+```
+
+>
+부모와 자식 -> 자식또한 부모가 될 수 있고 부모또한 자식이 될 수 있기 때문에 올바르지 않음
+동물과 호랑이 -> 호랑이는 동물의 한 종류이다. 동물을 호랑이로 확장시키기 때문에 LSP성립
+
+# ISP(인터페이스 분리 원칙)
+* **자신이 사용하지 않는 인터페이스는 구현하지 말아야 한다.**
+* **하나의 일반적인 인터페이스 보다 여러개의 구체적인 인터페이스가 낫다.**
+```java
+public interface Action(){
+    void drive();
+    void eat();
+    void go();
+    void back();
+    void develop();
+    void sing();
+}
+```
+>
+특별한 행위에 대한 인터페이스를 정의하고 메소드들을 떡칠해놨다.
+하지만 Action인터페이스를 구현하는 구현체가 저 각각 다른 느낌의 행위의 메소드들을 사용을 하지 않는다면 ISP원칙을 위배한다.
+
+# DIP(의존 역전 원칙)
+* **추상화된 것은 구체적인 것에 의존하면 안 된다. 구체적인 것이 추상화된 것에 의존해야 한다.**
+* **추상클래스 또는 상위클래스는 구체적인 구현**
+```java
+class Benz {
+	SnowTire snowTire = new SnowTire();
+}
+```
+>벤츠가 SnowTire를 장착하고 있다. SnowTire는 계절에 영향을 받아 벤츠라는 클래스보다 더 변화에 민감한 SnowTire를 의존하고 있다. 이걸 역전하려면 다음과 같다.
+
+```java
+class Benz {
+	Tire tire = new SnowTire();
+}
+public interface Tire{
+}
+public class SnowTire implements Tire{
+}
+public class CommonTire implements Tire{
+}
+```
+>
+변하기 쉬운것에 의존하던 것을 추상화된 인터페이스를 두어 영향을 받지 않게 의존방향을 역전시킴.
